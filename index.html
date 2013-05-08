@@ -41,5 +41,84 @@
         standing whatsoever.
       </p>
     </section>
+    <section>
+      <h2>Introduction</h2>
+      <p>
+        @@@
+      </p>
+      <section>
+        <h2>Example</h2>
+        <p>
+          @@@
+        </p>
+      </section>
+    </section>
+    <section id='conformance'></section>
+    <section>
+      <h2>Wish Granter Registration</h2>
+      <p>
+        A wish granter is registered using the <code>link</code> element, using the <code>wish</code>
+        relationship.
+      </p>
+      <pre class='example'>
+&lt;link rel='wish' href='image-editor.json'></pre>
+      <p>
+        The <code>href</code> attribute points to a JSON document.
+      </p>
+      <pre class='example'>
+{
+  name:   "Wunderbar Image Editor"
+, action: "edit"
+, types:  ["image/*"]
+, href:   "editor-implementation.html"
+}</pre>
+      <p>
+        There can be many <code>link</code>s using the <code>wish</code> relationship pointing
+        to different descriptions. How user agents handle the services they discover is 
+        implementation-specific, but they could simply remember them all and apply some heuristics
+        (frequency of visit to the site) to sort them when needed, as well as allow for preferred
+        granters.
+      </p>
+    </section>
+    <section>
+      <h2>Wishing</h2>
+      <p>
+        Wishing is done with a very simple API.
+      </p>
+      <pre class='example'>
+var url = navigator.wishFor("edit", "image/webp")
+,   iframe = document.getElementById("embed-here")
+;
+iframe.src = url;
+iframe.onload = function () {
+    iframe.contentWindow.postMessage({ image: imageData });
+};
+window.onmessage = function (evt) {
+    if (!evt.data || evt.data.type !== "image-edited") return;
+    // work with evt.data.image
+};
+</pre>
+      <p>
+        The URL returned by <code>navigator.wishFor()</code> has the same properties as Blob URLs.
+        It can be used to load an <code>iframe</code>, but also to open a new tab or a new window if
+        needed.
+      </p>
+      <p>
+        When loaded, if the UA knows of several possible granters that could respond and doesn't 
+        have any reason to just prefer one (this is UA specific) it renders a choice page for
+        granter services. (This does not trigger the load event.)
+      </p>
+      <p>
+        When a granter is picked (either directly or through user interaction) it is loaded, and
+        the load event is fired. Communication is then entirely carried out using the usual 
+        Web Messaging framework.
+      </p>
+    </section>
+    <section>
+      <h2>Security Considerations</h2>
+      <p>
+        Are the attack vectors any different from regular <code>iframe</code>s?
+      </p>
+    </section>
   </body>
 </html>
