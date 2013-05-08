@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Web Wishes</title>
+    <script src='http://www.w3.org/Tools/respec/respec-w3c-common' async></script>
+    <script class='remove'>
+      var respecConfig = {
+              specStatus:   "unofficial"
+          ,   shortName:    "html-web-wishes"
+          ,   editors:      [{ name: "Robin Berjon", url: "http://berjon.com/",
+                               company: "W3C", companyURL: "http://w3.org/" }]
+          ,   wg:           "HTML Working Group"
+          ,   wgURI:        "http://www.w3.org/html/wg/"
+          ,   wgPublicList: "public-html"
+          ,   wgPatentURI:  "http://www.w3.org/2004/01/pp-impl/40318/status"
+          ,   edDraftURI:   "http://darobin.github.com/web-wish/"
+          ,   license:      "open"
+        };
+    </script>
+  </head>
+  <body>
+    <section id='abstract'>
+      <p>
+        This specification defines a mechanism for Web applications to register themselves as
+        being able to handle certain specific types of services ("grant wishes") with a user
+        agent. Once a service handler is registered, any Web application can then request its
+        functionality from the user agent in order to compose the service into itself.
+      </p>
+      <p>
+        For instance, a Web application could register itself as an image editor. When another
+        application needs image editing functionality (e.g. a meme generator) then it can 
+        instantiate the image editor as part of itself (typically in an <code>iframe</code>). The
+        editor is selected based on user preference rather than by hardcoding it. This provides a
+        simple yet powerful component model for Web applications.
+      </p>
+    </section>
+    <section id='sotd'>
+      <p>
+        This specification is a proposed extension specification to HTML and has no official
+        standing whatsoever.
+      </p>
+    </section>
+  </body>
+</html>
