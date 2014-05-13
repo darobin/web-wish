@@ -12,10 +12,14 @@
                                company: "W3C", companyURL: "http://w3.org/" }]
           ,   wg:           "HTML Working Group"
           ,   wgURI:        "http://www.w3.org/html/wg/"
-          ,   wgPublicList: "public-html"
+          ,   wgPublicList: "public-web-intents"
           ,   wgPatentURI:  "http://www.w3.org/2004/01/pp-impl/40318/status"
           ,   edDraftURI:   "http://darobin.github.com/web-wish/"
-          ,   license:      "open"
+          ,   license:      "cc-by"
+          ,   bugTracker: {
+                  "new":  "https://github.com/darobin/web-wish/issues/new"
+              ,   open:   "https://github.com/darobin/web-wish/issues"
+              }
         };
     </script>
     <style>
@@ -185,7 +189,21 @@
       <section>
         <h2>Return Value</h2>
         <p>
-          
+          While “fire &amp; forget” wishes definitely have their uses, it is common for
+          <a>applications</a> to expect data to be returned from the interaction with a
+          <a>wish service</a>.
+        </p>
+        <p>
+          In this scenario we consider the following workflow: a user wishes to create a hilarious
+          meme, and goes to a meme publishing web site for that purpose. The meme publishing
+          web site first asks the user to pick an image to serve as the starting point for the meme.
+          That operation relies on <code>&lt;input type=file></code> in order to show how wishes
+          can integrate with that part of the platform. Then it will offer to edit the image, using
+          a wish to edit.
+        </p>
+        <p>
+          In both cases, data is returned from the <a>wish service</a>, and in the second case data
+          is also received by it.
         </p>
       </section>
       <section>
