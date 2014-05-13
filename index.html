@@ -27,6 +27,12 @@
       figcaption .fig-title {
           font-weight:  normal;
       }
+      section {
+          max-width:  900px;
+      }
+      dl dd {
+          margin-bottom: 0.5em;
+      }
     </style>
   </head>
   <body>
@@ -104,6 +110,19 @@
           </figcaption>
         </figure>
         <p>
+          Creating a share button is a simple matter of attaching a handler to it and formulating
+          a wish.
+        </p>
+        <pre class='example highlight'>
+          &lt;button id='share'>&#128571; Share this!&lt;/button>
+          &lt;!-- … -->
+          &lt;script>
+            document.querySelector("#share").onclick = function () {
+                new Wish("share", "text/plain", location.href).make();
+            };
+          &lt;/script>
+        </pre>
+        <p>
           The user is then presented with a list of wish services that she has installed in her user
           agent (or, possibly, more generally on her operating system). Of these she selects the
           “Unicorner” social sharing site where she can share with her fellow unicorns.
@@ -114,6 +133,13 @@
             User selects “Unicorner” in the list of services that can fulfil the wish to share.
           </figcaption>
         </figure>
+        <p>
+          The <a>wish service</a> picker requires no work from the developer and is entirely
+          handled by the user agent. The list matches wish services that the user agent knows can
+          fulfil this wish (this can comprise those installed by the user, but can also come from
+          other sources such as system application, a specialised search engine, etc.). Installing
+          a wish into a user agent is covered in a later section.
+        </p>
         <p>
           The “Unicorner” web site, which is a social sharing web site that the user happens to like
           (here showing how Wishes can help open up the Web to new contenders without having to 
@@ -128,6 +154,33 @@
             Unicorner's next generation sharing UX.
           </figcaption>
         </figure>
+        <p>
+          There are two essential parts to the <a>wish service</a>'s handling of the wish. The first
+          part is being notified of the wish, including of the wish's payload and acting 
+          accordingly in order to fulfil it. The code for this is straightforward.
+        </p>
+        <pre class='example highlight'>
+          &lt;textarea id='content'>&lt;/textarea>
+          &lt;button id='unishare'>Share!&lt;/button>
+          &lt;!-- … -->
+          &lt;script>
+            var wish;
+            window.onwish = function (someWish) {
+                wish = someWish;
+                document.querySelector("#content").value = wish.data;
+            };
+            document.querySelector("#unishare").onclick = function () {
+                // …code to actually post the message to the site…
+                if (wish) wish.fulfil();
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          Note that the code above still needs to call <code>fulfil()</code> on the wish once the
+          action is completed, even though it is returning no data to the <a>application</a>. This
+          tells the user agent that the wish is fulfilled and it can use that notification for
+          instance to close the tab containing the <a>wish service</a>.
+        </p>
       </section>
       <section>
         <h2>Return Value</h2>
