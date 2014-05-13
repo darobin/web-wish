@@ -18,9 +18,34 @@
           ,   license:      "open"
         };
     </script>
+    <style>
+      figcaption {
+          padding-left: 50px;
+          font-size:  0.8em;
+          font-weight:  bold;
+      }
+      figcaption .fig-title {
+          font-weight:  normal;
+      }
+    </style>
   </head>
   <body>
     <section id='abstract'>
+      <p>
+        This specification defines a mechanism for Web applications to register themselves as
+        being able to handle certain specific types of services ("grant wishes") with a user
+        agent. Once a service handler is registered, any Web application can then request its
+        functionality from the user agent in order to compose the service into itself.
+      </p>
+    </section>
+    <section id='sotd'>
+      <p>
+        This specification is a proposed extension specification to HTML and has no official
+        standing whatsoever.
+      </p>
+    </section>
+    <section>
+      <h2>Introduction</h2>
       <p>
         This specification defines a mechanism for Web applications to register themselves as
         being able to handle certain specific types of services ("grant wishes") with a user
@@ -34,91 +59,87 @@
         editor is selected based on user preference rather than by hardcoding it. This provides a
         simple yet powerful component model for Web applications.
       </p>
-    </section>
-    <section id='sotd'>
       <p>
-        This specification is a proposed extension specification to HTML and has no official
-        standing whatsoever.
+        This functionality is similar to that provided in Android Intents or in FirefoxOS   
+        Activities. However, in order to ship more quickly and to explore the simpler options first
+        this specification is limited to a subset of the functionality afforded in existing systems.
       </p>
     </section>
     <section>
-      <h2>Introduction</h2>
+      <h2>Usage Scenarios</h2>
       <p>
-        @@@
+        This section details a variety of usage scenarios for Wishes in order to help define how
+        exactly they should work.
       </p>
+      <p>
+        Note that all code examples are provisional and use completely made up syntax. The scenarios
+        rely on the following loose terminology (to be tightened up when the view is clearer).
+      </p>
+      <dl>
+        <dt><dfn>application</dfn></dt>
+        <dd>
+          A regular Web application running in the user's browser, and typically calling upon wishes
+          in the following scenarios.
+        </dd>
+        <dt><dfn>wish service</dfn></dt>
+        <dd>
+          A Web page written in such a way that it knows how to fulfil a wish and that exposes
+          functionality to the application in that way.
+        </dd>
+      </dl>
       <section>
-        <h2>Example</h2>
+        <h2>Fire &amp; Forget</h2>
         <p>
-          @@@
+          This is the simplest case. Here the <a>application</a> formulates a wish but does not care
+          about any return value, or even about the success, of the wish.
+        </p>
+        <p>
+          A typical example is the wish to share. The user is visiting an application page,
+          finds it most cromulous, and wishes to share it with the world at large.
+        </p>
+        <figure>
+          <img src='img/scenarios/share-click.jpg' width="800" height="497">
+          <figcaption>
+            User clicks the “share” button in order to share this most cromulous piece of humour.
+          </figcaption>
+        </figure>
+        <p>
+          The user is then presented with a list of wish services that she has installed in her user
+          agent (or, possibly, more generally on her operating system). Of these she selects the
+          “Unicorner” social sharing site where she can share with her fellow unicorns.
+        </p>
+        <figure>
+          <img src='img/scenarios/share-picker.jpg' width="800" height="497">
+          <figcaption>
+            User selects “Unicorner” in the list of services that can fulfil the wish to share.
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h2>Return Value</h2>
+        <p>
+          
+        </p>
+      </section>
+      <section>
+        <h2>Full Duplex Communication</h2>
+        <p>
+          
+        </p>
+      </section>
+      <section>
+        <h2>Embedded Wish</h2>
+        <p>
+          
+        </p>
+      </section>
+      <section>
+        <h2>Installing a Wish</h2>
+        <p>
+          
         </p>
       </section>
     </section>
     <section id='conformance'></section>
-    <section>
-      <h2>Wish Granter Registration</h2>
-      <p>
-        A wish granter is registered using the <code>link</code> element, using the <code>wish</code>
-        relationship.
-      </p>
-      <pre class='example'>
-&lt;link rel='wish' href='image-editor.json'></pre>
-      <p>
-        The <code>href</code> attribute points to a JSON document.
-      </p>
-      <pre class='example'>
-{
-  name:   "Wunderbar Image Editor"
-, action: "edit"
-, types:  ["image/*"]
-, href:   "editor-implementation.html"
-}</pre>
-      <p>
-        There can be many <code>link</code>s using the <code>wish</code> relationship pointing
-        to different descriptions. How user agents handle the services they discover is 
-        implementation-specific, but they could simply remember them all and apply some heuristics
-        (frequency of visit to the site) to sort them when needed, as well as allow for preferred
-        granters.
-      </p>
-    </section>
-    <section>
-      <h2>Wishing</h2>
-      <p>
-        Wishing is done with a very simple API.
-      </p>
-      <pre class='example'>
-var url = navigator.wishFor("edit", "image/webp")
-,   iframe = document.getElementById("embed-here")
-;
-iframe.src = url;
-iframe.onload = function () {
-    iframe.contentWindow.postMessage({ image: imageData });
-};
-window.onmessage = function (evt) {
-    if (!evt.data || evt.data.type !== "image-edited") return;
-    // work with evt.data.image
-};
-</pre>
-      <p>
-        The URL returned by <code>navigator.wishFor()</code> has the same properties as Blob URLs.
-        It can be used to load an <code>iframe</code>, but also to open a new tab or a new window if
-        needed.
-      </p>
-      <p>
-        When loaded, if the UA knows of several possible granters that could respond and doesn't 
-        have any reason to just prefer one (this is UA specific) it renders a choice page for
-        granter services. (This does not trigger the load event.)
-      </p>
-      <p>
-        When a granter is picked (either directly or through user interaction) it is loaded, and
-        the load event is fired. Communication is then entirely carried out using the usual 
-        Web Messaging framework.
-      </p>
-    </section>
-    <section>
-      <h2>Security Considerations</h2>
-      <p>
-        Are the attack vectors any different from regular <code>iframe</code>s?
-      </p>
-    </section>
   </body>
 </html>
