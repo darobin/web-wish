@@ -168,14 +168,13 @@
           &lt;button id='unishare'>Share!&lt;/button>
           &lt;!-- … -->
           &lt;script>
-            var wish;
-            window.onwish = function (someWish) {
-                wish = someWish;
-                document.querySelector("#content").value = wish.data;
+            window.onload = function () {
+                if (currentWish)
+                    document.querySelector("#content").value = currentWish.data;
             };
             document.querySelector("#unishare").onclick = function () {
                 // …code to actually post the message to the site…
-                if (wish) wish.fulfil();
+                if (currentWish) currentWish.fulfil();
             };
           &lt;/script>
         </pre>
@@ -205,6 +204,94 @@
           In both cases, data is returned from the <a>wish service</a>, and in the second case data
           is also received by it.
         </p>
+        <p>
+          The application's UI is simple:
+        </p>
+        <figure>
+          <img src='img/scenarios/memecat.png' width="397" height="374" style='border: 1px solid #aaa'>
+          <figcaption>
+            MemeCat — The World's Laziest Meme Maker
+          </figcaption>
+        </figure>
+        <p>
+          Clicking the first “Pick a picture” step hits an <code>&lt;input type=file></code>
+          control, which in fact just formulates the wish to pick a file. To give a better idea for
+          how this works, here is how you would get a list of files from a file input type.
+        </p>
+        <pre class='example highlight'>
+          &lt;input type="file" accept="image/*" multiple id="uploads">
+          &lt;script>
+            document.querySelector("#uploads").onchange = function (ev) {
+                handleFiles(Array.prototype.slice.call(ev.target.files));
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          And here is the equivalent code using a wish:
+        </p>
+        <pre class='example highlight'>
+          &lt;button id="uploads">Upload&lt;/button>
+          &lt;script>
+            document.querySelector("#uploads").onclick = function () {
+                new Wish("pick", "image/*", { multiple: true }).then(handleFiles);
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          These come out at the same amount of code. With the wish we need to handle clicking 
+          ourselves which the file input type provides free, but if you ever wish to style your
+          file input control then that's a plus because you will need this sort of indirection
+          anyway. A positive side effect of the wish side is that you don't need no stinking
+          <code>FileList</code>.
+        </p>
+        <p>
+          It is important that the file input type and the wish to pick produce the same user
+          experience since to the user, who neither knows nor cares for the page source, they are
+          the same operation.
+        </p>
+        <p class='note'>
+          For the code examples we use the <code>multiple</code> attribute in order to 
+          demonstrate its mapping, but the MemeCat <a>application</a> naturally only wants a single
+          image.
+        </p>
+        <p>
+          Irrespective of how MemeCat chose to implement its file picking, the user would be
+          presented with the familiar <a>wish service</a> picker:
+        </p>
+        <figure>
+          <img src='img/scenarios/memecat-picker.png' width="397" height="374">
+          <figcaption>
+            The system file picker, as depicted if you let a standards geek create icons.
+          </figcaption>
+        </figure>
+        <p>
+          A <a>wish service</a> that knows how to fulfil a pick (of any kind) will return either
+          a <code>File</code> or an array thereof depending on the value of the 
+          <code>multiple</code> field. Such a service could be implemented using code of the kind
+          that follows:
+        </p>
+        <pre class='example highlight'>
+          &lt;div id="pics">
+            &lt;-- a list of images that can be clicked to select them -->
+          &lt;/div>
+          &lt;script>
+            document.querySelector("#pics").onclick = function (ev) {
+                if (ev.target.localName.toLowerCase() !== "img") return;
+                if (!currentWish) return;
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", ev.target.src);
+                xhr.responseType = "blob";
+                xhr.onload = function () {
+                    var file = new File(xhr.response
+                                      , ev.target.src.replace(/^.*\//, "")
+                                      , { type: xhr.getResponseHeader("Content-Type") }
+                    );
+                    currentWish.fulfil(currentWish.data.multiple ? [file] : file);
+                };
+                xhr.send();
+            };
+          &lt;/script>
+        </pre>
       </section>
       <section>
         <h2>Full Duplex Communication</h2>
@@ -226,5 +313,14 @@
       </section>
     </section>
     <section id='conformance'></section>
+    <section>
+      <h2>The <code>Wish</code> interface</h2>
+      <p class='issue'>
+        Is it really useful to distinguish between fire&amp;forget and return value wish modalities
+        through different methods? Maybe instead of <code>once()</code>/<code>then()</code> it
+        would be clearer to have it be <code>send()</code>/<code>ask()</code>. That depends on
+        whether it makes sense to enable Wishes to behave like Promises in some cases.
+      </p>
+    </section>
   </body>
 </html>
