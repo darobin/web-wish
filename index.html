@@ -446,8 +446,82 @@
       <section>
         <h2>Installing a Wish</h2>
         <p>
-          
+          So far we have looked at scenarios involving formulating wishes from the 
+          <a>application</a>'s point of view, as well as how a given <a>wish service</a> might
+          reply. However in order for a service to fulfil a wish, the user agent needs to know about
+          it.
         </p>
+        <p>
+          There are many ways in which a user agent can become aware of wishes that it can offer as
+          options to the user when needed. Here is a non-exhaustive list:
+        </p>
+        <dl>
+          <dt>Explicit installation</dt>
+          <dd>
+            The user may explicitly wish to “install” a given application as part of a list of
+            wishes. This may happen if the Web application itself is being installed (something
+            which can happen in some contexts), or as a form of bookmarking specific to wishes.
+            When visiting a site offering a <a>wish service</a>, the user agent may provide an
+            affordance for the user to specifically perform this action. Alternatively, it could be
+            made possible for Web applications to give users a way of installing them (instead of
+            relying on UA UI, which Web developers are often hesitant to.)
+          </dd>
+          <dt>Remembered navigation</dt>
+          <dd>
+            As the user navigates across the Web, her browser will come across pages that are
+            declaring wishes. While having wish picker dialogs immediately show all such wishes
+            would be a bad idea in that it would encourage spamming of that dialog (and even without
+            malicious intent would likely cause it to be overcrowded), it can nevertheless be a good
+            idea for browsers to remember that information so as to be able to offer those sites as
+            options, notably in case no other known service can fulfil a given wish.
+          </dd>
+          <dt>Wish Search</dt>
+          <dd>
+            The wish picker could expose a search affordance that would make it possible to find
+            wishes across the Web using a dedicated search engine.
+          </dd>
+          <dt>Built-in or default wishes</dt>
+          <dd>
+            User agents would likely ship with a number of wish services that they would
+            fulfil themselves (e.g. the wish to pick a file for instance). Likewise, they could
+            have a list of pre-configured services for various wishes.
+          </dd>
+          <dt>Platform wishes</dt>
+          <dd>
+            The browser can query the platform it is running on to find out if there are local
+            applications that could fulfil a given wish.
+          </dd>
+        </dl>
+        <p>
+          A wish is in effect nothing more than a Web application that can be interfaced with
+          programmatically following a specific interface. A <a>wish service</a> simply
+          needs to express a little bit of metadata so that it can be recognised by user agents,
+          crawlers, etc., but that metadata is very similar to that which can be used to describe
+          a Web application.
+        </p>
+        <p>
+          Because of that, wish services can declare themselves using additional information from
+          web apps manifest [[!appmanifest]]. Manifests can be linked in the usual manner:
+        </p>
+        <pre class='example highlight'>
+          &lt;link rel="manifest" href="memecat.json">
+        </pre>
+        <p>
+          This entails that any process exposed by the browser to install the wish would work 
+          through installing the application. If there are cases in which one desires to solely
+          make the wish “installable” then a different syntax (but using the exact same JSON)
+          can be used:
+        </p>
+        <pre class='example highlight'>
+          &lt;link rel="wish" href="memecat.json">
+        </pre>
+        <p>
+          The JSON itself is an extension to the basic web apps manifest format.
+        </p>
+        <!--
+          UAs can do whatever they want, too
+          explicit install from page? <button></button>
+        -->
       </section>
     </section>
     <section id='conformance'></section>
