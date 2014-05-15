@@ -310,6 +310,9 @@
           native application (so long as the user agent knows how to interact with the platform's
           conventions that support such communication).
         </p>
+        <p>
+          Sharing can then be supported just as it is in the first section.
+        </p>
       </section>
       <section>
         <h2>Full Duplex Communication</h2>
@@ -332,7 +335,7 @@
           granularity).
         </p>
         <p>
-          You can get <a>wish services</a> for these two talking together with the following
+          You can get wish services for these two talking together with the following
           application.
         </p>
         <pre class='example highlight'>
@@ -340,7 +343,7 @@
           &lt;button id="vcs">Select project to subscribe to&lt;/button>
           &lt;script>
             var chat;
-            document.querySelector("#edit").onclick = function () {
+            document.querySelector("#chat").onclick = function () {
                 chat = new Wish("publish", "text/simple-chat").port();
             };
             document.querySelector("#vcs").onclick = function () {
@@ -368,7 +371,35 @@
       <section>
         <h2>Explicit Wish</h2>
         <p>
-          new Wish(...).explicit("http://...").then();
+          It is conceivable that there are cases in which an <a>application</a> may wish to operate
+          with just one explicitly well-defined <a>wish service</a>, making use of the wish
+          conventions for communication (likely because they are already supported by a given
+          service) but without giving the user the opportunity to choose the service (presumably
+          because it may result in a predictably poor decision).
+        </p>
+        <p>
+          To take the MemeCat example again, it is likely that the image source should be 
+          open-ended, but the service might wish to enforce a given editor service that consistently
+          enforces Web meme conventions relying on the Impact font, specific stroke and fill, etc.
+          where a general-purpose image editor might let the user overlay her cat picture with, say,
+          Comic Sans text — clearly a bad thing.
+        </p>
+        <p>
+          Making an explicit wish to edit can be done as follows:
+        </p>
+        <pre class='example highlight'>
+          &lt;button id="edit">Edit&lt;/button>
+          &lt;script>
+            document.querySelector("#edit").onclick = function () {
+                new Wish("edit", file.type, { content: file })
+                      .explicit("http://cool-editor.meme")
+                      .then(handleMeme);
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          It is unclear at this point whether explicit memes are required in an initial installment
+          of this technology.
         </p>
       </section>
       <section>
