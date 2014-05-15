@@ -398,14 +398,49 @@
           &lt;/script>
         </pre>
         <p>
-          It is unclear at this point whether explicit memes are required in an initial installment
+          It is unclear at this point whether explicit memes are required in an initial instalment
           of this technology.
         </p>
       </section>
       <section>
         <h2>Embedded Wish</h2>
         <p>
-          
+          While user agents are free to implement a user interface for wish services in any way they
+          see fit, some constraints (notably of relying on trusted chrome) are such that we can
+          expect typical implementations to render any <a>wish service</a> in a clearly separated
+          context.
+        </p>
+        <p>
+          This approach is clearly sufficient for many interactions, as can be readily seen in 
+          mobile applications that make use of wish-like functionality.
+        </p>
+        <p>
+          It is, however, possible to conceive of cases involving more advanced applicative
+          composition for which it would be desirable to be able to embed multiple wish services
+          inside a given application, in order to produce a more useful whole.
+        </p>
+        <p>
+          An example of such a scenario could be for a mail user agent. It is a truth universally
+          acknowledged that MUAs are terrible to point of obeying principles of Churchillian 
+          democracy: whichever one you choose is the worst form of MUA, except all the others that
+          you have tried. Part of the problem likely stems from the fact that a single MUA needs
+          to offer multiple different views on email (list of mailboxes, list of emails, emails,
+          etc.) all of which can be done in many different ways, and users do not fit into a simple
+          set of profiles that enjoy specific configurations: they will have preference combinations
+          all over the place. The combinatorics of the situation are such that the likelihood for
+          any given MUA vendor to produce a combination that matches your particular needs are
+          negligible enough that we can consider the task impossible.
+        </p>
+        <p>
+          This problem can be solved by making each component separate, and making it easy for
+          users to compose their own client from multiple sources, possibly replacing components
+          when they find better ones. We could therefore envision a world in which one's MUA is
+          a relatively dumb <a>application</a> that does nothing more than expose the data and
+          lay out replaceable embedded wishes for all the parts that make up a MUA's UI.
+        </p>
+        <p>
+          Such a universe of wonder is, however, far enough out of reach that wish embedding is not
+          at this point a driving consideration here.
         </p>
       </section>
       <section>
