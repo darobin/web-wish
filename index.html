@@ -292,11 +292,83 @@
             };
           &lt;/script>
         </pre>
+        <p>
+          Once the MemeCat has obtained a picture <code>file</code>, editing it is no harder.
+        </p>
+        <pre class='example highlight'>
+          &lt;button id="edit">Edit&lt;/button>
+          &lt;script>
+            document.querySelector("#edit").onclick = function () {
+                new Wish("edit", file.type, { content: file }).then(handleMeme);
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          It is simply a wish to edit the given file MIME type, operating on the provided content.
+          Once done the edited content is sent back using the same mechanism as for the file picker.
+          It is worth noting here that it is entirely possible for this wish to be fulfilled by a
+          native application (so long as the user agent knows how to interact with the platform's
+          conventions that support such communication).
+        </p>
       </section>
       <section>
         <h2>Full Duplex Communication</h2>
         <p>
-          
+          Once a <a>wish service</a> is instantiated, in theory there is no reason why it could not
+          remain permanently open and remain open to continuous, full-duplex communication with the
+          <a>application</a>. The use cases for this are however more tenuous than for the simpler
+          interactions, and more importantly the implementation is more difficult to convey in the
+          user interface. Because of this, at this point it is expected that this scenario will not
+          be covered by this version of the specification. A quick discussion of the scenario can
+          nevertheless prove useful.
+        </p>
+        <p>
+          One common application of full duplex wishes is patching together application components 
+          that today are usually shipped as a single bundle. Imagine for instance that you two web
+          applications. One is a code management system which allows you to track progress, commits,
+          etc. on a project you are working on. Another is an IRC client which you use to 
+          communicate with your team. Both already have your login information, settings, etc. that
+          should not need to be shared with anyone, even through tokens (with  insufficient
+          granularity).
+        </p>
+        <p>
+          You can get <a>wish services</a> for these two talking together with the following
+          application.
+        </p>
+        <pre class='example highlight'>
+          &lt;button id="chat">Select chat to publish to&lt;/button>
+          &lt;button id="vcs">Select project to subscribe to&lt;/button>
+          &lt;script>
+            var chat;
+            document.querySelector("#edit").onclick = function () {
+                chat = new Wish("publish", "text/simple-chat").port();
+            };
+            document.querySelector("#vcs").onclick = function () {
+                var vcs = new Wish("subscribe", "application/vcs-notify+json").port();
+                vcs.onmessage = function (ev) {
+                    if (!chat) return;
+                    if (ev.data.type !== "commit") return;
+                    chat.postMessage("Commit: [" + ev.data.author + "] " + ev.data.msg + "\n", "*");
+                };
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          The above is, clearly, a simplification, done in order to give the right idea. But as
+          such it could well enough operate.
+        </p>
+        <p>
+          It should be noted that because wishes match on both action (the verb) and on payload
+          type they likely encourage a relative proliferation of MIME type minting, as seen above.
+          That is not necessarily a bad thing. Whether a specific format should be encourage
+          (typically, MIME types) or whether we should just match any string (with prefix matching
+          when terminated with a <code>*</code>) is an open question.
+        </p>
+      </section>
+      <section>
+        <h2>Explicit Wish</h2>
+        <p>
+          new Wish(...).explicit("http://...").then();
         </p>
       </section>
       <section>
@@ -321,6 +393,9 @@
         would be clearer to have it be <code>send()</code>/<code>ask()</code>. That depends on
         whether it makes sense to enable Wishes to behave like Promises in some cases.
       </p>
+      <!--
+        support wishing to interact with potentially multiple types?
+      -->
     </section>
   </body>
 </html>
