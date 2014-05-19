@@ -518,10 +518,51 @@
         <p>
           The JSON itself is an extension to the basic web apps manifest format.
         </p>
-        <!--
-          UAs can do whatever they want, too
-          explicit install from page? <button></button>
-        -->
+        <pre class='example highlight' title='Application manifest with wishes'>
+          {
+            "name": "Unicorner"
+          , "icons": [{
+                        "src":    "icons/lowres.webp"
+                      , "sizes":  "64x64"
+                      , "type":   "image/webp"
+                      }
+                    , {
+                        "src":    "icons/hd.png"
+                      , "sizes":  "128x128"
+                      }]
+          , "start_url": "/index.html"
+          , "wishes": [{
+                        "name":       "Edit"
+                      , "start_url":  "/wish/edit.html"
+                      , "action":     "edit"
+                      , "types":      ["image/*"]
+                      , "icons": [{
+                                    "src":    "icons/edit.webp"
+                                  , "sizes":  "64x64"
+                                  }]
+                      }
+                    , {
+                        "name":       "Share"
+                      , "start_url":  "/wish/share.html"
+                      , "action":     "share"
+                      , "types":      ["text/plain"]
+                      }
+                    , {
+                        "name":       "Pick Media"
+                      , "start_url":  "/wish/pick.html"
+                      , "action":     "pick"
+                      , "types":      ["image/*", "video/*", "audio/*"]
+                      }]
+          }
+        </pre>
+        <p>
+          Authors traditionally do not like to have to rely on UA affordances (because it means they
+          can't emphasise it if needed, also when explaining to users one needs to document for each
+          browser, stay up to date, etc.). If installing pages (in a sense specific to the Web)
+          becomes more mainstream, it would likely be welcome to support installation from actions
+          carried out inside of the viewport. Such a mechanism is not, however, catered to at this
+          point.
+        </p>
       </section>
     </section>
     <section id='conformance'></section>
