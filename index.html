@@ -315,60 +315,6 @@
         </p>
       </section>
       <section>
-        <h2>Full Duplex Communication</h2>
-        <p>
-          Once a <a>wish service</a> is instantiated, in theory there is no reason why it could not
-          remain permanently open and remain open to continuous, full-duplex communication with the
-          <a>application</a>. The use cases for this are however more tenuous than for the simpler
-          interactions, and more importantly the implementation is more difficult to convey in the
-          user interface. Because of this, at this point it is expected that this scenario will not
-          be covered by this version of the specification. A quick discussion of the scenario can
-          nevertheless prove useful.
-        </p>
-        <p>
-          One common application of full duplex wishes is patching together application components 
-          that today are usually shipped as a single bundle. Imagine for instance that you two web
-          applications. One is a code management system which allows you to track progress, commits,
-          etc. on a project you are working on. Another is an IRC client which you use to 
-          communicate with your team. Both already have your login information, settings, etc. that
-          should not need to be shared with anyone, even through tokens (with  insufficient
-          granularity).
-        </p>
-        <p>
-          You can get wish services for these two talking together with the following
-          application.
-        </p>
-        <pre class='example highlight'>
-          &lt;button id="chat">Select chat to publish to&lt;/button>
-          &lt;button id="vcs">Select project to subscribe to&lt;/button>
-          &lt;script>
-            var chat;
-            document.querySelector("#chat").onclick = function () {
-                chat = new Wish("publish", "text/simple-chat").port();
-            };
-            document.querySelector("#vcs").onclick = function () {
-                var vcs = new Wish("subscribe", "application/vcs-notify+json").port();
-                vcs.onmessage = function (ev) {
-                    if (!chat) return;
-                    if (ev.data.type !== "commit") return;
-                    chat.postMessage("Commit: [" + ev.data.author + "] " + ev.data.msg + "\n", "*");
-                };
-            };
-          &lt;/script>
-        </pre>
-        <p>
-          The above is, clearly, a simplification, done in order to give the right idea. But as
-          such it could well enough operate.
-        </p>
-        <p>
-          It should be noted that because wishes match on both action (the verb) and on payload
-          type they likely encourage a relative proliferation of MIME type minting, as seen above.
-          That is not necessarily a bad thing. Whether a specific format should be encourage
-          (typically, MIME types) or whether we should just match any string (with prefix matching
-          when terminated with a <code>*</code>) is an open question.
-        </p>
-      </section>
-      <section>
         <h2>Explicit Wish</h2>
         <p>
           It is conceivable that there are cases in which an <a>application</a> may wish to operate
@@ -397,50 +343,9 @@
             };
           &lt;/script>
         </pre>
-        <p>
+        <p class='note'>
           It is unclear at this point whether explicit memes are required in an initial instalment
           of this technology.
-        </p>
-      </section>
-      <section>
-        <h2>Embedded Wish</h2>
-        <p>
-          While user agents are free to implement a user interface for wish services in any way they
-          see fit, some constraints (notably of relying on trusted chrome) are such that we can
-          expect typical implementations to render any <a>wish service</a> in a clearly separated
-          context.
-        </p>
-        <p>
-          This approach is clearly sufficient for many interactions, as can be readily seen in 
-          mobile applications that make use of wish-like functionality.
-        </p>
-        <p>
-          It is, however, possible to conceive of cases involving more advanced applicative
-          composition for which it would be desirable to be able to embed multiple wish services
-          inside a given application, in order to produce a more useful whole.
-        </p>
-        <p>
-          An example of such a scenario could be for a mail user agent. It is a truth universally
-          acknowledged that MUAs are terrible to point of obeying principles of Churchillian 
-          democracy: whichever one you choose is the worst form of MUA, except all the others that
-          you have tried. Part of the problem likely stems from the fact that a single MUA needs
-          to offer multiple different views on email (list of mailboxes, list of emails, emails,
-          etc.) all of which can be done in many different ways, and users do not fit into a simple
-          set of profiles that enjoy specific configurations: they will have preference combinations
-          all over the place. The combinatorics of the situation are such that the likelihood for
-          any given MUA vendor to produce a combination that matches your particular needs are
-          negligible enough that we can consider the task impossible.
-        </p>
-        <p>
-          This problem can be solved by making each component separate, and making it easy for
-          users to compose their own client from multiple sources, possibly replacing components
-          when they find better ones. We could therefore envision a world in which one's MUA is
-          a relatively dumb <a>application</a> that does nothing more than expose the data and
-          lay out replaceable embedded wishes for all the parts that make up a MUA's UI.
-        </p>
-        <p>
-          Such a universe of wonder is, however, far enough out of reach that wish embedding is not
-          at this point a driving consideration here.
         </p>
       </section>
       <section>
@@ -577,6 +482,127 @@
       <!--
         support wishing to interact with potentially multiple types?
       -->
+    </section>
+    <section class='appendix'>
+      <h2>Future Scenarios</h2>
+      <p>
+        A number of different scenarios were considered for this functionality, but only a subset
+        thereof were kept in scope for this version. Those that were excluded, but that may return
+        in future, are captured below.
+      </p>
+      <section>
+        <h2>Full Duplex Communication</h2>
+        <p>
+          Once a <a>wish service</a> is instantiated, in theory there is no reason why it could not
+          remain permanently open and remain open to continuous, full-duplex communication with the
+          <a>application</a>. The use cases for this are however more tenuous than for the simpler
+          interactions, and more importantly the implementation is more difficult to convey in the
+          user interface. Because of this, at this point it is expected that this scenario will not
+          be covered by this version of the specification. A quick discussion of the scenario can
+          nevertheless prove useful.
+        </p>
+        <p>
+          One common application of full duplex wishes is patching together application components 
+          that today are usually shipped as a single bundle. Imagine for instance that you two web
+          applications. One is a code management system which allows you to track progress, commits,
+          etc. on a project you are working on. Another is an IRC client which you use to 
+          communicate with your team. Both already have your login information, settings, etc. that
+          should not need to be shared with anyone, even through tokens (with  insufficient
+          granularity).
+        </p>
+        <p>
+          You can get wish services for these two talking together with the following
+          application.
+        </p>
+        <pre class='example highlight'>
+          &lt;button id="chat">Select chat to publish to&lt;/button>
+          &lt;button id="vcs">Select project to subscribe to&lt;/button>
+          &lt;script>
+            var chat;
+            document.querySelector("#chat").onclick = function () {
+                chat = new Wish("publish", "text/simple-chat").port();
+            };
+            document.querySelector("#vcs").onclick = function () {
+                var vcs = new Wish("subscribe", "application/vcs-notify+json").port();
+                vcs.onmessage = function (ev) {
+                    if (!chat) return;
+                    if (ev.data.type !== "commit") return;
+                    chat.postMessage("Commit: [" + ev.data.author + "] " + ev.data.msg + "\n", "*");
+                };
+            };
+          &lt;/script>
+        </pre>
+        <p>
+          The above is, clearly, a simplification, done in order to give the right idea. But as
+          such it could well enough operate.
+        </p>
+        <p>
+          It should be noted that because wishes match on both action (the verb) and on payload
+          type they likely encourage a relative proliferation of MIME type minting, as seen above.
+          That is not necessarily a bad thing. Whether a specific format should be encourage
+          (typically, MIME types) or whether we should just match any string (with prefix matching
+          when terminated with a <code>*</code>) is an open question.
+        </p>
+      </section>
+      <section>
+        <h2>Embedded Wish</h2>
+        <p>
+          While user agents are free to implement a user interface for wish services in any way they
+          see fit, some constraints (notably of relying on trusted chrome) are such that we can
+          expect typical implementations to render any <a>wish service</a> in a clearly separated
+          context.
+        </p>
+        <p>
+          This approach is clearly sufficient for many interactions, as can be readily seen in 
+          mobile applications that make use of wish-like functionality.
+        </p>
+        <p>
+          It is, however, possible to conceive of cases involving more advanced applicative
+          composition for which it would be desirable to be able to embed multiple wish services
+          inside a given application, in order to produce a more useful whole.
+        </p>
+        <p>
+          An example of such a scenario could be for a mail user agent. It is a truth universally
+          acknowledged that MUAs are terrible to point of obeying principles of Churchillian 
+          democracy: whichever one you choose is the worst form of MUA, except all the others that
+          you have tried. Part of the problem likely stems from the fact that a single MUA needs
+          to offer multiple different views on email (list of mailboxes, list of emails, emails,
+          etc.) all of which can be done in many different ways, and users do not fit into a simple
+          set of profiles that enjoy specific configurations: they will have preference combinations
+          all over the place. The combinatorics of the situation are such that the likelihood for
+          any given MUA vendor to produce a combination that matches your particular needs are
+          negligible enough that we can consider the task impossible.
+        </p>
+        <p>
+          This problem can be solved by making each component separate, and making it easy for
+          users to compose their own client from multiple sources, possibly replacing components
+          when they find better ones. We could therefore envision a world in which one's MUA is
+          a relatively dumb <a>application</a> that does nothing more than expose the data and
+          lay out replaceable embedded wishes for all the parts that make up a MUA's UI.
+        </p>
+        <p>
+          Such a universe of wonder is, however, far enough out of reach that wish embedding is not
+          at this point a driving consideration here.
+        </p>
+      </section>
+    </section>
+    <section>
+      <h2>Acknowledgements</h2>
+      <p>
+        The following people have contributed to the elaboration of this standard.
+      </p>
+      <p>
+        Of particular note, the original Web Intents people: Greg Billock, James Hawkins, and Paul
+        Kinlan. Many thanks for your patience, your dedication when surrounded by mockery, and
+        being fun to work with.
+      </p>
+      <p>
+        Mathias Bynens,
+        Karl Dubost,
+        Dominique Hazaël-Massieux,
+        Mounir Lamouri,
+        Jonas Sicking.
+      </p>
     </section>
   </body>
 </html>
