@@ -93,7 +93,7 @@
         </dd>
         <dt><dfn>wish service</dfn></dt>
         <dd>
-          A Web page written in such a way that it knows how to fulfil a wish and that exposes
+          A Web page written in such a way that it knows how to fulfill a wish and that exposes
           functionality to the application in that way.
         </dd>
       </dl>
@@ -134,7 +134,7 @@
         <figure>
           <img src='img/scenarios/share-picker.jpg' width="800" height="497">
           <figcaption>
-            User selects “Unicorner” in the list of services that can fulfil the wish to share.
+            User selects “Unicorner” in the list of services that can fulfill the wish to share.
           </figcaption>
         </figure>
         <p>
@@ -161,7 +161,7 @@
         <p>
           There are two essential parts to the <a>wish service</a>'s handling of the wish. The first
           part is being notified of the wish, including of the wish's payload and acting 
-          accordingly in order to fulfil it. The code for this is straightforward.
+          accordingly in order to fulfill it. The code for this is straightforward.
         </p>
         <pre class='example highlight'>
           &lt;textarea id='content'>&lt;/textarea>
@@ -174,12 +174,12 @@
             };
             document.querySelector("#unishare").onclick = function () {
                 // …code to actually post the message to the site…
-                if (currentWish) currentWish.fulfil();
+                if (currentWish) currentWish.fulfill();
             };
           &lt;/script>
         </pre>
         <p>
-          Note that the code above still needs to call <code>fulfil()</code> on the wish once the
+          Note that the code above still needs to call <code>fulfill()</code> on the wish once the
           action is completed, even though it is returning no data to the <a>application</a>. This
           tells the user agent that the wish is fulfilled and it can use that notification for
           instance to close the tab containing the <a>wish service</a>.
@@ -265,7 +265,7 @@
           </figcaption>
         </figure>
         <p>
-          A <a>wish service</a> that knows how to fulfil a pick (of any kind) will return either
+          A <a>wish service</a> that knows how to fulfill a pick (of any kind) will return either
           a <code>File</code> or an array thereof depending on the value of the 
           <code>multiple</code> field. Such a service could be implemented using code of the kind
           that follows:
@@ -286,7 +286,7 @@
                                       , ev.target.src.replace(/^.*\//, "")
                                       , { type: xhr.getResponseHeader("Content-Type") }
                     );
-                    currentWish.fulfil(currentWish.data.multiple ? [file] : file);
+                    currentWish.fulfill(currentWish.data.multiple ? [file] : file);
                 };
                 xhr.send();
             };
@@ -448,7 +448,7 @@
         <p>
           So far we have looked at scenarios involving formulating wishes from the 
           <a>application</a>'s point of view, as well as how a given <a>wish service</a> might
-          reply. However in order for a service to fulfil a wish, the user agent needs to know about
+          reply. However in order for a service to fulfill a wish, the user agent needs to know about
           it.
         </p>
         <p>
@@ -473,7 +473,7 @@
             would be a bad idea in that it would encourage spamming of that dialog (and even without
             malicious intent would likely cause it to be overcrowded), it can nevertheless be a good
             idea for browsers to remember that information so as to be able to offer those sites as
-            options, notably in case no other known service can fulfil a given wish.
+            options, notably in case no other known service can fulfill a given wish.
           </dd>
           <dt>Wish Search</dt>
           <dd>
@@ -483,13 +483,13 @@
           <dt>Built-in or default wishes</dt>
           <dd>
             User agents would likely ship with a number of wish services that they would
-            fulfil themselves (e.g. the wish to pick a file for instance). Likewise, they could
+            fulfill themselves (e.g. the wish to pick a file for instance). Likewise, they could
             have a list of pre-configured services for various wishes.
           </dd>
           <dt>Platform wishes</dt>
           <dd>
             The browser can query the platform it is running on to find out if there are local
-            applications that could fulfil a given wish.
+            applications that could fulfill a given wish.
           </dd>
         </dl>
         <p>
