@@ -142,7 +142,7 @@
           handled by the user agent. The list matches wish services that the user agent knows can
           fulfil this wish (this can comprise those installed by the user, but can also come from
           other sources such as system application, a specialised search engine, etc.). Installing
-          a wish into a user agent is covered in a later section.
+          a service into a user agent is covered in a later section.
         </p>
         <p>
           The “Unicorner” web site, which is a social sharing web site that the user happens to like
@@ -349,32 +349,32 @@
         </p>
       </section>
       <section>
-        <h2>Installing a Wish</h2>
+        <h2>Installing a Wish Service</h2>
         <p>
           So far we have looked at scenarios involving formulating wishes from the 
           <a>application</a>'s point of view, as well as how a given <a>wish service</a> might
-          reply. However in order for a service to grant a wish, the user agent needs to know about
-          it.
+          reply. However, in order for a service to grant a wish, the user agent needs to know about
+          the service first.
         </p>
         <p>
-          There are many ways in which a user agent can become aware of wishes that it can offer as
+          There are many ways in which a user agent can become aware of wish services that it can offer as
           options to the user when needed. Here is a non-exhaustive list:
         </p>
         <dl>
           <dt>Explicit installation</dt>
           <dd>
             The user may explicitly wish to “install” a given application as part of a list of
-            wishes. This may happen if the Web application itself is being installed (something
-            which can happen in some contexts), or as a form of bookmarking specific to wishes.
+            wish services. This may happen if the Web application itself is being installed (something
+            which can happen in some contexts), or as a form of bookmarking specific to wish services.
             When visiting a site offering a <a>wish service</a>, the user agent may provide an
             affordance for the user to specifically perform this action. Alternatively, it could be
             made possible for Web applications to give users a way of installing them (instead of
-            relying on UA UI, which Web developers are often hesitant to.)
+            relying on UA UI, which Web developers are often hesitant to do.)
           </dd>
           <dt>Remembered navigation</dt>
           <dd>
             As the user navigates across the Web, her browser will come across pages that are
-            declaring wishes. While having wish picker dialogs immediately show all such wishes
+            declaring wish services. While having wish picker dialogs immediately show all such services
             would be a bad idea in that it would encourage spamming of that dialog (and even without
             malicious intent would likely cause it to be overcrowded), it can nevertheless be a good
             idea for browsers to remember that information so as to be able to offer those sites as
@@ -382,23 +382,23 @@
           </dd>
           <dt>Wish Search</dt>
           <dd>
-            The wish picker could expose a search affordance that would make it possible to find
-            wishes across the Web using a dedicated search engine.
+            The wish service picker could expose a search affordance that would make it possible to find
+            services across the Web using a dedicated search engine.
           </dd>
-          <dt>Built-in or default wishes</dt>
+          <dt>Built-in or default wish services</dt>
           <dd>
             User agents would likely ship with a number of wish services that they would
-            grant themselves (e.g. the wish to pick a file for instance). Likewise, they could
+            grant themselves (e.g. for the wish to pick a file for instance). Likewise, they could
             have a list of pre-configured services for various wishes.
           </dd>
-          <dt>Platform wishes</dt>
+          <dt>Platform wish services</dt>
           <dd>
             The browser can query the platform it is running on to find out if there are local
             applications that could grant a given wish.
           </dd>
         </dl>
         <p>
-          A wish is in effect nothing more than a Web application that can be interfaced with
+          A wish service is in effect nothing more than a Web application that can be interfaced with
           programmatically following a specific interface. A <a>wish service</a> simply
           needs to express a little bit of metadata so that it can be recognised by user agents,
           crawlers, etc., but that metadata is very similar to that which can be used to describe
@@ -412,10 +412,10 @@
           &lt;link rel="manifest" href="memecat.json">
         </pre>
         <p>
-          This entails that any process exposed by the browser to install the wish would work 
-          through installing the application. If there are cases in which one desires to solely
-          make the wish “installable” then a different syntax (but using the exact same JSON)
-          can be used:
+          This entails that any process exposed by the browser to install the service would work
+          through installing the application. If there are cases in which one desires to
+          make the remote service accessible to wishes without installation then a different
+          syntax (but using the exact same JSON) can be used:
         </p>
         <pre class='example highlight'>
           &lt;link rel="wish" href="memecat.json">
@@ -423,7 +423,7 @@
         <p>
           The JSON itself is an extension to the basic web apps manifest format.
         </p>
-        <pre class='example highlight' title='Application manifest with wishes'>
+        <pre class='example highlight' title='Application manifest with handled wishes'>
           {
             "name": "Unicorner"
           , "icons": [{
@@ -539,13 +539,13 @@
         <p>
           It should be noted that because wishes match on both action (the verb) and on payload
           type they likely encourage a relative proliferation of MIME type minting, as seen above.
-          That is not necessarily a bad thing. Whether a specific format should be encourage
+          That is not necessarily a bad thing. Whether a specific format should be encouraged
           (typically, MIME types) or whether we should just match any string (with prefix matching
           when terminated with a <code>*</code>) is an open question.
         </p>
       </section>
       <section>
-        <h2>Embedded Wish</h2>
+        <h2>Embedded Wish Services</h2>
         <p>
           While user agents are free to implement a user interface for wish services in any way they
           see fit, some constraints (notably of relying on trusted chrome) are such that we can
@@ -578,10 +578,10 @@
           users to compose their own client from multiple sources, possibly replacing components
           when they find better ones. We could therefore envision a world in which one's MUA is
           a relatively dumb <a>application</a> that does nothing more than expose the data and
-          lay out replaceable embedded wishes for all the parts that make up a MUA's UI.
+          lay out replaceable embedded wish services for all the parts that make up a MUA's UI.
         </p>
         <p>
-          Such a universe of wonder is, however, far enough out of reach that wish embedding is not
+          Such a universe of wonder is, however, far enough out of reach that wish service embedding is not
           at this point a driving consideration here.
         </p>
       </section>
